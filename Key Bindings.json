@@ -1,0 +1,5 @@
+[
+	{ "keys": ["shift+s"], "command": "set_project_directory" },
+	{ "keys": ["shift+c"], "command": "clear_project_directory" },
+	{ "keys": ["shift+e"], "command": "edit_project_start_script"}
+]
