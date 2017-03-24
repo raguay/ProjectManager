@@ -131,13 +131,14 @@ class EnteringProjectDirectory(DirectoryPaneListener):
             # Get the current project name and see if they
             # are the same.
             #
+            projDir = ""
             with open(PROJECTDIR) as f:
                 projDir = f.read()
-                if projDir != newDir:
-                    #
-                    # They are different! Set the new project directory
-                    # and run the .startproject script.
-                    #
-                    with open(PROJECTDIR, "w") as f:
-                        f.write(newDir)
-                    os.system("'" + scriptFile + "'")
+            if projDir != newDir:
+                #
+                # They are different! Set the new project directory
+                # and run the .startproject script.
+                #
+                with open(PROJECTDIR, "w") as f:
+                    f.write(newDir)
+                os.system("'" + scriptFile + "'")
