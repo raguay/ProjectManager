@@ -14,7 +14,10 @@ After restarting **fman**, you will have the ability to set a new project direct
 
 <Shift+e> - Edit the current project's startup script.
 
+Search Projects - This allows you to pick a project to go to from a list. By typing letters in the name, it will fuzzy match and trim down the selection list.
+
 ### Features
 
  - The ability to set a current project directory.
  - Run a startup script when entering a project directory from another one.
+ - Go to the project by picking it from a list of projects.

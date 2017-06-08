@@ -1,7 +1,8 @@
 #
 # Load the libraries that are used in these commands.
 #
-from fman import DirectoryPaneCommand, DirectoryPaneListener, show_alert, load_json, DATA_DIRECTORY, show_prompt
+from core.quicksearch_matchers import contains_chars
+from fman import DirectoryPaneCommand, DirectoryPaneListener, show_alert, load_json, DATA_DIRECTORY, show_prompt, show_quicksearch, QuicksearchItem, show_status_message
 import os, stat
 
 #
@@ -11,6 +12,35 @@ import os, stat
 #
 PROJECTDIR = os.path.expanduser("~") + "/.currentprojectdir"
 PROJECTSLIST = os.path.expanduser("~") + "/.projects"
+
+class SearchProjects(DirectoryPaneCommand):
+    #
+    # This directory command is for selecting a project
+    # and going to that directory.
+    #
+    def __call__(self):
+        show_status_message('Project Selection')
+        result = show_quicksearch(self._suggest_projects)
+        if result:
+            query, projectName = result
+            if os.path.isfile(PROJECTSLIST):
+                with open(PROJECTSLIST, "r") as f:
+                    projects = f.readlines()
+            for projectTuple in projects:
+                parts = projectTuple.split('|')
+                if parts[0].strip() == projectName:
+                    self.pane.set_path(parts[1].strip() + "/")
+
+    def _suggest_projects(self, query):
+        projects = ["No Projects are setup."]
+        if os.path.isfile(PROJECTSLIST):
+            with open(PROJECTSLIST, "r") as f:
+                projects = f.readlines()
+        for projectTuple in projects:
+            project = projectTuple.split('|')[0].strip()
+            match = contains_chars(project.lower(), query.lower())
+            if match or not query or not project == "":
+                yield QuicksearchItem(project, highlight=match)
 
 class SetProjectDirectory(DirectoryPaneCommand):
     #
