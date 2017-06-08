@@ -16,6 +16,8 @@ After restarting **fman**, you will have the ability to set a new project direct
 
 Search Projects - This allows you to pick a project to go to from a list. By typing letters in the name, it will fuzzy match and trim down the selection list.
 
+Remove Project - This allows you to pick a project to remove from the list of projects.
+
 ### Features
 
  - The ability to set a current project directory.
