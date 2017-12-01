@@ -34,7 +34,7 @@ class SearchProjects(DirectoryPaneCommand):
             for projectTuple in projects:
                 parts = projectTuple.split('|')
                 if parts[0].strip() == projectName:
-                    self.pane.set_path(parts[1].strip() + "/")
+                    self.pane.set_path(as_url(parts[1].strip()))
         clear_status_message()
 
     def _suggest_projects(self, query):
