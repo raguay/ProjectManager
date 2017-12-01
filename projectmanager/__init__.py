@@ -3,7 +3,11 @@
 #
 from core.quicksearch_matchers import contains_chars
 from fman import DirectoryPaneCommand, DirectoryPaneListener, show_alert, load_json, DATA_DIRECTORY, show_prompt, show_quicksearch, QuicksearchItem, show_status_message, clear_status_message
-import os, stat
+import os
+import stat
+from fman.url import as_human_readable
+from fman.url import as_url
+
 
 #
 # I'm using two globals because it is faster for checking
@@ -12,6 +16,7 @@ import os, stat
 #
 PROJECTDIR = os.path.expanduser("~") + "/.currentprojectdir"
 PROJECTSLIST = os.path.expanduser("~") + "/.projects"
+
 
 class SearchProjects(DirectoryPaneCommand):
     #
@@ -89,7 +94,7 @@ class SetProjectDirectory(DirectoryPaneCommand):
         if len(selected_files) >= 1 or (len(selected_files) == 0 and self.get_chosen_files()):
             if len(selected_files) == 0 and self.get_chosen_files():
                 selected_files.append(self.get_chosen_files()[0])
-            dirName = selected_files[0]
+            dirName = as_human_readable(selected_files[0])
             if os.path.isfile(dirName):
                 #
                 # It's a file, not a directory. Get the directory
@@ -110,7 +115,7 @@ class SetProjectDirectory(DirectoryPaneCommand):
             writeappend = 'w'
             if os.path.isfile(PROJECTSLIST):
                 writeappend = 'a'
-            with open(PROJECTSLIST,writeappend) as f:
+            with open(PROJECTSLIST, writeappend) as f:
                 f.write(projEntry+"\n")
             #
             # Create the launch script file and open in the
@@ -157,7 +162,7 @@ class EditProjectStartScript(DirectoryPaneCommand):
         # Get the current project directory.
         #
         dirName = ""
-        with open(PROJECTDIR,'r') as f:
+        with open(PROJECTDIR, 'r') as f:
             dirName = f.read()
         if dirName != "":
             #
@@ -188,7 +193,7 @@ class EnteringProjectDirectory(DirectoryPaneListener):
         #
         # See if the new directory is a project directory.
         #
-        newDir = self.pane.get_path()
+        newDir = as_human_readable(self.pane.get_path())
         scriptFile = newDir + "/.startproject"
         if os.path.isfile(scriptFile):
             #
