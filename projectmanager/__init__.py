@@ -206,8 +206,9 @@ class EnteringProjectDirectory(DirectoryPaneListener):
             if projDir != newDir:
                 #
                 # They are different! Set the new project directory
-                # and run the .startproject script.
+                # and run the .startproject script. Pass the new project 
+                # directory to the script file.
                 #
                 with open(PROJECTDIR, "w") as f:
                     f.write(newDir)
-                os.system("'" + scriptFile + "'")
+                os.system("'" + scriptFile + "' '" + newDir + "'")
