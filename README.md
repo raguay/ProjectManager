@@ -1,12 +1,17 @@
 ## Project Manager
 
-Plugin for [fman.io](https://fman.io) that gives you the ability to run startup scripts when entering a project directory.
+Plugin for [fman.io](https://fman.io) that gives you the ability to run startup
+scripts when entering a project directory.
 
 Install with [fman's built-in command for installing plugins](https://fman.io/docs/installing-plugins). 
 
-This extension is designed to work with the "OpenWithEditor" extension as well. If the "OpenWithEditor" extension is loaded, it will open the script files using the editor selected in **BitBar**. Otherwise, it will use **TextEdit**.
+This extension is designed to work with the "OpenWithEditor" extension as well. If 
+the "OpenWithEditor" extension is loaded, it will open the script files using the
+editor selected in **BitBar**. Otherwise, it will use the default system editor 
+for the file type.
 
-After restarting **fman**, you will have the ability to set a new project directory, start processes, etc.
+After restarting **fman**, you will have the ability to set a new project directory, 
+start processes, etc.
 
 ### Usage
 
