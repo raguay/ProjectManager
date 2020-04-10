@@ -126,9 +126,9 @@ class SetProjectDirectory(DirectoryPaneCommand):
                 f.write("#!/bin/sh\n\n")
             os.chmod(scriptFile, stat.S_IEXEC|stat.S_IRUSR|stat.S_IWUSR)
             if (_THIRDPARTY_PLUGINS_DIR + "/OpenWithEditor") in _get_thirdparty_plugins():
-                self.pane.run_command("my_open_with_editor", args={'url': scriptFile})
+                self.pane.run_command("my_open_with_editor", args={'url': as_url(scriptFile)})
             else:
-                self.pane.run_command("open_with_editor", args={'url': scriptFile})
+                self.pane.run_command("open_with_editor", args={'url': as_url(scriptFile)})
         else:
             #
             # Technically, this will never be reached. Just here
@@ -163,9 +163,9 @@ class EditProjectStartScript(DirectoryPaneCommand):
             #
             scriptFile = dirName + "/.startproject"
             if (_THIRDPARTY_PLUGINS_DIR + "/OpenWithEditor") in _get_thirdparty_plugins():
-                self.pane.run_command("my_open_with_editor", args={'url': scriptFile})
+                self.pane.run_command("my_open_with_editor", args={'url': as_url(scriptFile)})
             else:
-                self.pane.run_command("open_with_editor", args={'url': scriptFile})
+                self.pane.run_command("open_with_editor", args={'url': as_url(scriptFile)})
 
 class EnteringProjectDirectory(DirectoryPaneListener):
     #
