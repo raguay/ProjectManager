@@ -8,7 +8,6 @@ import stat
 from fman.url import as_human_readable
 from fman.url import as_url
 
-
 #
 # I'm using two globals because it is faster for checking
 # the directories. I also have an Alfred workflow that makes
