@@ -6,8 +6,8 @@ from fman import DirectoryPaneCommand, DirectoryPaneListener, show_alert, load_j
 from core.commands import _get_thirdparty_plugins, _THIRDPARTY_PLUGINS_DIR
 import os
 import stat
-from fman.url import as_human_readable
-from fman.url import as_url
+from fman.url import as_human_readable, as_url
+from fman.fs import iterdir, exists
 
 #
 # I'm using two globals because it is faster for checking
@@ -198,3 +198,75 @@ class EnteringProjectDirectory(DirectoryPaneListener):
                 with open(PROJECTDIR, "w") as f:
                     f.write(newDir)
                 os.system("'" + scriptFile + "' '" + newDir + "'")
+
+class SearchProjects(DirectoryPaneCommand):
+    #
+    # This directory command is for selecting a project
+    # and going to that directory.
+    #
+    def __call__(self):
+        show_status_message('Project Selection')
+        result = show_quicksearch(self._suggest_projects)
+        if result:
+            query, projectName = result
+            if os.path.isfile(PROJECTSLIST):
+                with open(PROJECTSLIST, "r") as f:
+                    projects = f.readlines()
+            for projectTuple in projects:
+                parts = projectTuple.split('|')
+                if parts[0].strip() == projectName:
+                    self.pane.set_path(as_url(parts[1].strip()))
+        clear_status_message()
+
+    def _suggest_projects(self, query):
+        projects = ["No Projects are setup."]
+        if os.path.isfile(PROJECTSLIST):
+            with open(PROJECTSLIST, "r") as f:
+                projects = f.readlines()
+        for projectTuple in projects:
+            if projectTuple.strip() != "":
+                project = projectTuple.split('|')[0].strip()
+                match = contains_chars(project.lower(), query.lower())
+                if match or not query:
+                    yield QuicksearchItem(project, highlight=match)
+
+
+class EditProjectNotes(DirectoryPaneCommand):
+    #
+    # This directory command is for editing the notes associated
+    # with this project.
+    #
+    def __call__(self):
+        show_status_message('Project Selection')
+        projDir = ""
+        with open(PROJECTDIR) as f:
+            projDir = f.read()
+        url = as_url(projDir + "/.notes/")
+        if(exists(url)):
+            result = show_quicksearch(self._suggest_projects)
+            if result:
+                query, nf = result
+                newDir = as_human_readable(self.pane.get_path()) + "/.notes/"
+                scriptFile = newDir + nf
+                if (_THIRDPARTY_PLUGINS_DIR + "/OpenWithEditor") in _get_thirdparty_plugins():
+                    self.pane.run_command("my_open_with_editor", args={'url': as_url(scriptFile)})
+                else:
+                    self.pane.run_command("open_with_editor", args={'url': as_url(scriptFile)})
+        else:
+            show_alert("Notes directory hasn't been created.")
+        clear_status_message()
+
+
+    def _suggest_projects(self, query):
+        projects = ["No Projects are setup."]
+        projDir = ""
+        with open(PROJECTDIR) as f:
+            projDir = f.read()
+        url = as_url(projDir + "/.notes/")
+        dlist = list(iterdir(url))
+        for nf in dlist:
+            match = contains_chars(nf.lower(), query.lower())
+            if match or not query:
+                yield QuicksearchItem(nf, highlight=match)
+
+

@@ -25,6 +25,8 @@ Search Projects - This allows you to pick a project to go to from a list. By typ
 
 Remove Project - This allows you to pick a project to remove from the list of projects.
 
+Edit Project Notes - This command will list all the files in the `.notes` directory in the current project. It will open the user's preferred editor with that file.
+
 ### Features
 
  - The ability to set a current project directory.
