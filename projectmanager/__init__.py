@@ -2,11 +2,13 @@
 # Load the libraries that are used in these commands.
 #
 from core.quicksearch_matchers import contains_chars
-from fman import DirectoryPaneCommand, DirectoryPaneListener, show_alert, load_json, DATA_DIRECTORY, show_prompt, show_quicksearch, QuicksearchItem, show_status_message, clear_status_message
+from fman import DirectoryPaneCommand, DirectoryPaneListener, show_alert
+from fman import load_json, DATA_DIRECTORY, show_prompt, YES, NO, show_quicksearch
+from fman import QuicksearchItem, show_status_message, clear_status_message
 from core.commands import _get_thirdparty_plugins, _THIRDPARTY_PLUGINS_DIR
 import os
 import stat
-from fman.url import as_human_readable, as_url
+from fman.url import as_human_readable, as_url, join
 from fman.fs import iterdir, exists
 
 #
@@ -246,14 +248,19 @@ class EditProjectNotes(DirectoryPaneCommand):
             result = show_quicksearch(self._suggest_projects)
             if result:
                 query, nf = result
-                newDir = as_human_readable(self.pane.get_path()) + "/.notes/"
-                scriptFile = newDir + nf
+                scriptFile = as_human_readable(join(url,nf))
                 if (_THIRDPARTY_PLUGINS_DIR + "/OpenWithEditor") in _get_thirdparty_plugins():
                     self.pane.run_command("my_open_with_editor", args={'url': as_url(scriptFile)})
                 else:
                     self.pane.run_command("open_with_editor", args={'url': as_url(scriptFile)})
         else:
-            show_alert("Notes directory hasn't been created.")
+            choice = show_alert(
+                'The notes directory doesn\'t exist. Do you want to create it?',
+                buttons=YES | NO,
+                default_button=YES
+            )
+            if choice == YES:
+                mkdir(url)
         clear_status_message()
 
 
