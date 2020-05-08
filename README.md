@@ -15,20 +15,18 @@ start processes, etc.
 
 ### Usage
 
-<Shift+s>  - Runs the set_project_directory function in the current directory (or the directory under the cursor).
-
-<Shift+c> - Clear the current project setting.
-
-<Shift+e> - Edit the current project's startup script.
-
-Search Projects - This allows you to pick a project to go to from a list. By typing letters in the name, it will fuzzy match and trim down the selection list.
-
-Remove Project - This allows you to pick a project to remove from the list of projects.
-
-Edit Project Notes - This command will list all the files in the `.notes` directory in the current project. It will open the user's preferred editor with that file.
+| Command | Description |
+| --- | ------|
+| <Shift+s> | Runs the set_project_directory function in the current directory (or the directory under the cursor). |
+| <Shift+c> | Clear the current project setting.
+| <Shift+e> | Edit the current project's startup script.
+| Search Projects | This allows you to pick a project to go to from a list. By typing letters in the name, it will fuzzy match and trim down the selection list.
+| Remove Project | This allows you to pick a project to remove from the list of projects.
+| Edit Project Notes | This command will list all the files in the `.notes` directory in the top of the the current project directory. It will open the user's preferred editor with that file.
 
 ### Features
 
  - The ability to set a current project directory.
  - Run a startup script when entering a project directory from another one.
  - Go to the project by picking it from a list of projects.
+ - View and Edit notes created with the Notes plugin for fman.
