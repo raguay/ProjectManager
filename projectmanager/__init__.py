@@ -9,7 +9,7 @@ from core.commands import _get_thirdparty_plugins, _THIRDPARTY_PLUGINS_DIR
 import os
 import stat
 from fman.url import as_human_readable, as_url, join
-from fman.fs import iterdir, exists
+from fman.fs import iterdir, exists, mkdir
 
 #
 # I'm using two globals because it is faster for checking
@@ -232,48 +232,5 @@ class SearchProjects(DirectoryPaneCommand):
                 if match or not query:
                     yield QuicksearchItem(project, highlight=match)
 
-
-class EditProjectNotes(DirectoryPaneCommand):
-    #
-    # This directory command is for editing the notes associated
-    # with this project.
-    #
-    def __call__(self):
-        show_status_message('Project Selection')
-        projDir = ""
-        with open(PROJECTDIR) as f:
-            projDir = f.read()
-        url = as_url(projDir + "/.notes/")
-        if(exists(url)):
-            result = show_quicksearch(self._suggest_projects)
-            if result:
-                query, nf = result
-                scriptFile = as_human_readable(join(url,nf))
-                if (_THIRDPARTY_PLUGINS_DIR + "/OpenWithEditor") in _get_thirdparty_plugins():
-                    self.pane.run_command("my_open_with_editor", args={'url': as_url(scriptFile)})
-                else:
-                    self.pane.run_command("open_with_editor", args={'url': as_url(scriptFile)})
-        else:
-            choice = show_alert(
-                'The notes directory doesn\'t exist. Do you want to create it?',
-                buttons=YES | NO,
-                default_button=YES
-            )
-            if choice == YES:
-                mkdir(url)
-        clear_status_message()
-
-
-    def _suggest_projects(self, query):
-        projects = ["No Projects are setup."]
-        projDir = ""
-        with open(PROJECTDIR) as f:
-            projDir = f.read()
-        url = as_url(projDir + "/.notes/")
-        dlist = list(iterdir(url))
-        for nf in dlist:
-            match = contains_chars(nf.lower(), query.lower())
-            if match or not query:
-                yield QuicksearchItem(nf, highlight=match)
 
 
